@@ -1,6 +1,6 @@
 {
   "name": "@trinasolar/auto-complete-code-webpack-plugin",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "自动补全套路代码",
   "main": "src/index.js",
   "scripts": {
