@@ -22,7 +22,7 @@ const piecedPath = (publicPath, filePath) =>
  * @param {Object} exprStatement
  * @param {Object} optItem
  */
-function storehandler(exprStatement, optItem) {
+const storehandler = function(exprStatement, optItem) {
   if (!optItem.publicPath) optItem.publicPath = "src/store";
   const meta = {
     arguments: null,
@@ -58,5 +58,5 @@ function storehandler(exprStatement, optItem) {
   } catch (error) {
     console.error("auto-complete-code-webpack-plugin", error);
   }
-}
+};
 export default storehandler;

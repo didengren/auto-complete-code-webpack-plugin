@@ -1,4 +1,4 @@
-import storehandler from "./store/index";
+import storehandler from "./store";
 
 const fs = require("fs");
 
