@@ -1,0 +1,60 @@
+{
+  "name": "auto-complete-code-webpack-plugin",
+  "version": "0.0.1",
+  "description": "自动补全套路代码",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/didengren/auto-complete-code-webpack-plugin.git"
+  },
+  "keywords": [
+    "auto-complete",
+    "webpack",
+    "webpack-plugin"
+  ],
+  "author": "Sam Xu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/didengren/auto-complete-code-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/didengren/auto-complete-code-webpack-plugin#readme",
+  "engines": {
+    "node": ">= 10.15.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "eslint --fix",
+      "git add ."
+    ]
+  },
+  "peerDependencies": {
+    "webpack": "^4.0.0 || ^5.0.0"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "recast": "^0.18.5",
+    "webpack": "^4.41.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@webpack-contrib/eslint-config-webpack": "^3.0.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1"
+  }
+}
