@@ -29,10 +29,9 @@ const howGetJsCode = function(file, data) {
 /**
  * 解析es module的ast获取关键代码
  * @param {Object} prop declaration.properties数组里的元素
- * @param {Array} opts 插件参数
+ * @param {Object} optItem 插件参数
  */
-const astParserForESM = function(prop, opts = []) {
-  console.log(2);
+const astParserForESM = function(prop, optItem = {}) {
   if (prop.value.type === "ObjectExpression") {
     prop.value.properties.forEach((propItem) => {
       // console.log("ObjectExpression");
@@ -48,30 +47,29 @@ const astParserForESM = function(prop, opts = []) {
         if (exprStatement.type === "ExpressionStatement") {
           // console.log("ExpressionStatement______", exprStatement.expression);
           // 有不同的expression e.g. AssignmentExpression CallExpression
-          if (exprStatement.expression.type === "CallExpression") {
+          if (
+            exprStatement.expression.type === "CallExpression" &&
+            optItem.fn
+          ) {
             if (
               (exprStatement.expression.callee.type === "Identifier" &&
-                exprStatement.expression.callee.name === opts.funcName) ||
+                exprStatement.expression.callee.name === optItem.fn) ||
               (exprStatement.expression.callee.type === "MemberExpression" &&
-                exprStatement.expression.callee.property.name === opts.funcName)
+                exprStatement.expression.callee.property.name === optItem.fn)
             ) {
-              if (opts.length === 0) return;
-              opts.forEach((optItem) => {
-                try {
-                  if (optItem.module) {
-                    switch (optItem.module) {
-                      case "store":
-                        console.log(3);
-                        storehandler(exprStatement, optItem);
-                        break;
-                      default:
-                        break;
-                    }
-                  } else throw new Error("传参错误 module字段不存在");
-                } catch (error) {
-                  console.error("auto-complete-code-webpack-plugin", error);
-                }
-              });
+              try {
+                if (optItem.module) {
+                  switch (optItem.module) {
+                    case "store":
+                      storehandler(exprStatement, optItem);
+                      break;
+                    default:
+                      break;
+                  }
+                } else throw new Error("传参错误 module字段不存在");
+              } catch (error) {
+                console.error("auto-complete-code-webpack-plugin", error);
+              }
             }
           }
         }
@@ -89,24 +87,31 @@ AutoCompleteCodeWebpackPlugin.prototype.apply = function(compiler) {
     compiler,
     cb
   ) {
-    console.log(1);
     const changedTimes = compiler.watchFileSystem.watcher.mtimes;
     const changedFiles = Object.keys(changedTimes);
     if (changedFiles instanceof Array && changedFiles.length > 0) {
       changedFiles.forEach((file) => {
         fs.readFile(file, "utf-8", (err, data) => {
-          if (err) throw err;
-          const code = howGetJsCode(file, data);
-          if (code) {
-            const ast = recast.parse(code);
-            ast.program.body.forEach((item) => {
-              if (item.type === "ExportDefaultDeclaration") {
-                item.declaration &&
-                  item.declaration.properties.forEach((item) => {
-                    astParserForESM(item, that.options);
-                  });
+          try {
+            if (err) throw err;
+            const code = howGetJsCode(file, data);
+            if (code) {
+              const ast = recast.parse(code);
+
+              if (that.options.length === 0) return;
+              for (let i = 0; i < that.options.length; i++) {
+                ast.program.body.forEach((item) => {
+                  if (item.type === "ExportDefaultDeclaration") {
+                    item.declaration &&
+                      item.declaration.properties.forEach((item) => {
+                        astParserForESM(item, that.options[i]);
+                      });
+                  }
+                });
               }
-            });
+            }
+          } catch (error) {
+            console.error("auto-complete-code-webpack-plugin", error);
           }
         });
       });
