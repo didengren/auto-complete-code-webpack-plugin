@@ -6,7 +6,10 @@ module.exports = (api) => {
   return {
     presets: [
       [
-        "@babel/preset-env"
+        "@babel/preset-env",
+        {
+          useBuiltIns: "usage"
+        }
         // {
         //   targets: {
         //     node: '10.15.3',
