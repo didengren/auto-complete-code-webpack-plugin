@@ -13,7 +13,7 @@ const readFile = (fs, path) => {
  * 创建写入流并写入内容
  * @param {Object} meta 动态元信息
  */
-export const createFileAndWrite = function(meta) {
+exports.createFileAndWrite = function(meta) {
   readFile(fs, meta.path);
   const ctxTpl = `const state = () => ({});
 
@@ -42,4 +42,4 @@ export default {
   });
 };
 
-export const writeInFile = function() {};
+exports.writeInFile = function() {};

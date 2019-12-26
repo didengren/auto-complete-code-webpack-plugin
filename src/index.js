@@ -1,8 +1,8 @@
-import storehandler from "./store";
-
 const fs = require("fs");
 
 const recast = require("recast");
+
+const storehandler = require("./store");
 
 const onWatch = function(compiler, name, hook) {
   // webpack >= 4.0.0

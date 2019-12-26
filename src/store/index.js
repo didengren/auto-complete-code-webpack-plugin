@@ -1,13 +1,14 @@
 /**
  * vuex状态管理套路代码生成
  */
-import { createFileAndWrite, writeInFile } from "./generateCode";
 
 const path = require("path");
 
 const fs = require("fs");
 
 const recast = require("recast");
+
+const { createFileAndWrite, writeInFile } = require("./generateCode");
 
 /**
  * 拼接路径
@@ -22,7 +23,7 @@ const piecedPath = (publicPath, filePath) =>
  * @param {Object} exprStatement
  * @param {Object} optItem
  */
-const storehandler = function(exprStatement, optItem) {
+module.exports = (exprStatement, optItem) => {
   if (!optItem.publicPath) optItem.publicPath = "src/store";
   const meta = {
     arguments: null,
@@ -59,4 +60,3 @@ const storehandler = function(exprStatement, optItem) {
     console.error("auto-complete-code-webpack-plugin", error);
   }
 };
-export default storehandler;
