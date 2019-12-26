@@ -47,9 +47,12 @@ module.exports = (exprStatement, optItem) => {
     const trimRes = matchRes[0].replace(/\s+/g, "");
     const replaceRes = trimRes.replace(/\/\**/, "").replace(/\**\//, "");
     if (!~replaceRes.indexOf("store-path:")) return;
+    console.log(`replaceRes______${replaceRes}_______`);
     const filePath = replaceRes.replace(/store-path:/, "");
+    console.log(`filePath______${filePath}_______`);
     if (filePath === "") meta.path = piecedPath(optItem.publicPath, "index");
     else meta.path = piecedPath(optItem.publicPath, filePath);
+    console.log(`meta.path______${meta.path}_______`);
 
     // 判断是否创建文件还是打开现有文件 写入套路代码
     fs.open(meta.path, "r+", (err) => {

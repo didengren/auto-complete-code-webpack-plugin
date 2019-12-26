@@ -1,20 +1,20 @@
 // 根据元数据生成代码
 const fs = require("fs");
 
-const readFile = (fs, path) => {
-  try {
-    return fs.readFileSync(path, "utf-8");
-  } catch (error) {
-    console.error("auto-complete-code-webpack-plugin 读取文件错误", error);
-  }
-};
+// const readFile = (fs, path) => {
+//   try {
+//     return fs.readFileSync(path, "utf-8");
+//   } catch (error) {
+//     console.error("auto-complete-code-webpack-plugin 读取文件错误", error);
+//   }
+// };
 
 /**
  * 创建写入流并写入内容
  * @param {Object} meta 动态元信息
  */
-exports.createFileAndWrite = function(meta) {
-  readFile(fs, meta.path);
+exports.createFileAndWrite = function() {
+  // readFile(fs, meta.path);
   const ctxTpl = `const state = () => ({});
 
 const mutations = {};
