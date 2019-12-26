@@ -32,6 +32,7 @@ const howGetJsCode = function(file, data) {
  * @param {Array} opts 插件参数
  */
 const astParserForESM = function(prop, opts = []) {
+  console.log(2);
   if (prop.value.type === "ObjectExpression") {
     prop.value.properties.forEach((propItem) => {
       // console.log("ObjectExpression");
@@ -60,6 +61,7 @@ const astParserForESM = function(prop, opts = []) {
                   if (optItem.module) {
                     switch (optItem.module) {
                       case "store":
+                        console.log(3);
                         storehandler(exprStatement, optItem);
                         break;
                       default:
@@ -87,6 +89,7 @@ AutoCompleteCodeWebpackPlugin.prototype.apply = function(compiler) {
     compiler,
     cb
   ) {
+    console.log(1);
     const changedTimes = compiler.watchFileSystem.watcher.mtimes;
     const changedFiles = Object.keys(changedTimes);
     if (changedFiles instanceof Array && changedFiles.length > 0) {
