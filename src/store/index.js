@@ -45,7 +45,7 @@ module.exports = (exprStatement, optItem) => {
       /(?:^|\n|\r)\s*\/\*[\s\S]*?\*\/\s*(?:\r|\n|$)/
     );
     const trimRes = matchRes[0].replace(/\s+/g, "");
-    const replaceRes = trimRes.replace(/\/\**/, "").replace(/\**\//, "");
+    const replaceRes = trimRes.replace(/\/\**/, "").replace(/\*\//, "");
     if (!~replaceRes.indexOf("store-path:")) return;
     console.log(`replaceRes______${replaceRes}_______`);
     const filePath = replaceRes.replace(/store-path:/, "");
