@@ -8,7 +8,10 @@ const fs = require("fs");
 
 const recast = require("recast");
 
-const { createFileAndWrite, writeInFile } = require("./generateCode");
+const {
+  createFileAndWrite,
+  writeInFile
+} = require("./writeAccordingToMetadata");
 
 /**
  * 拼接路径
