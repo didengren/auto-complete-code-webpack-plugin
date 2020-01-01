@@ -26,6 +26,14 @@ const howGetJsCode = function(file, data) {
   return "";
 };
 
+// 匹配插件参数列表中的fn
+const matchFnField = (fnByUsed, fnArr) => {
+  for (let i = 0; i < fnArr.length; i++) {
+    if (fnByUsed === fnArr[i]) return true;
+  }
+  return false;
+};
+
 /**
  * 解析es module的ast获取关键代码
  * @param {Object} prop declaration.properties数组里的元素
@@ -49,13 +57,15 @@ const astParserForESM = function(prop, optItem = {}) {
           // 有不同的expression e.g. AssignmentExpression CallExpression
           if (
             exprStatement.expression.type === "CallExpression" &&
-            optItem.fn
+            optItem.fn &&
+            optItem.fn.length > 0
           ) {
+            const _callee = exprStatement.expression.callee;
             if (
-              (exprStatement.expression.callee.type === "Identifier" &&
-                exprStatement.expression.callee.name === optItem.fn) ||
-              (exprStatement.expression.callee.type === "MemberExpression" &&
-                exprStatement.expression.callee.property.name === optItem.fn)
+              (_callee.type === "Identifier" &&
+                matchFnField(_callee.name, optItem.fn)) ||
+              (_callee.type === "MemberExpression" &&
+                matchFnField(_callee.property.name, optItem.fn))
             ) {
               try {
                 if (optItem.module) {
