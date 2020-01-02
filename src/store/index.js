@@ -109,7 +109,7 @@ module.exports = (exprStatement, optItem, newFilePathArr) => {
      *     data: '{ data: true }',
      *     state: {
      *       name: 'test',
-     *      initVal: '{}'
+     *       initVal: '{}'
      *     }
      *   },
      *   path: '/Users/xunianzu/work_space/trina/gold-medal-butler/src/store/amAdd'
