@@ -83,7 +83,7 @@ const callParser = (data, meta) => {
         switch (node.id.name) {
           case "state":
             if (node.init.properties.length === 0) {
-              fnList.state(path);
+              fnList.state(path, meta);
             }
             break;
           default:

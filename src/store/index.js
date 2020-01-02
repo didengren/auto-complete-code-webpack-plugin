@@ -26,7 +26,7 @@ const piecedPath = (publicPath, filePath) =>
  * @param {Object} exprStatement
  * @param {Object} optItem
  */
-module.exports = (exprStatement, optItem) => {
+module.exports = (exprStatement, optItem, newFilePathArr) => {
   if (!optItem.publicPath) optItem.publicPath = "src/store";
   const meta = {
     arguments: {},
@@ -115,6 +115,7 @@ module.exports = (exprStatement, optItem) => {
      *   path: '/Users/xunianzu/work_space/trina/gold-medal-butler/src/store/amAdd'
      * }
      */
+    newFilePathArr.push(meta.path);
     fs.open(meta.path, "r+", (err) => {
       if (err && err.code === "ENOENT") createFileAndWrite(meta);
       else writeInFile(meta);

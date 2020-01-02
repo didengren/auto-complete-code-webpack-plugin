@@ -4,11 +4,32 @@ const recast = require("recast");
 
 const storehandler = require("./store");
 
+const newFilePathArr = [];
+
+/**
+ * webpack编译监听
+ * @param {*} compiler
+ * @param {String} name 插件名
+ * @param {Function} hook 回调 引发插件业务代码
+ */
 const onWatch = function(compiler, name, hook) {
   // webpack >= 4.0.0
   if (compiler.hooks) compiler.hooks.watchRun.tapAsync(name, hook);
   // webpack < 4.0.0
   else compiler.plugin("watch-run", hook);
+};
+
+/**
+ * webpack编译后钩子
+ * @param {*} compiler
+ * @param {String} name 插件名
+ * @param {Function} hook 回调 引发插件业务代码
+ */
+const onAfterCompile = function(compiler, name, hook) {
+  // webpack >= 4.0.0
+  if (compiler.hooks) compiler.hooks.afterCompile.tapAsync(name, hook);
+  // webpack < 4.0.0
+  else compiler.plugin("after-compile", hook);
 };
 
 /**
@@ -71,7 +92,7 @@ const astParserForESM = function(prop, optItem = {}) {
                 if (optItem.module) {
                   switch (optItem.module) {
                     case "store":
-                      storehandler(exprStatement, optItem);
+                      storehandler(exprStatement, optItem, newFilePathArr);
                       break;
                     default:
                       break;
@@ -127,6 +148,21 @@ AutoCompleteCodeWebpackPlugin.prototype.apply = function(compiler) {
       });
     }
     cb && cb();
+  });
+  onAfterCompile(compiler, "auto-complete-code-webpack-plugin", function(
+    compilation,
+    cb
+  ) {
+    if (newFilePathArr.length > 0) {
+      if (Array.isArray(compilation.fileDependencies)) {
+        compilation.fileDependencies.push(...newFilePathArr);
+      } else {
+        for (let i = 0; i < newFilePathArr.length; i++) {
+          compilation.fileDependencies.add(newFilePathArr[i]);
+        }
+      }
+    }
+    cb();
   });
 };
 
