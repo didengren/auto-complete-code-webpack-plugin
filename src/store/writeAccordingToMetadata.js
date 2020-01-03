@@ -31,6 +31,9 @@ const callParser = (data, meta) => {
           case "mutations":
             if (meta.nodeIdName === "mutations") fnList.mutation(path, meta);
             break;
+          case "actions":
+            if (meta.nodeIdName === "actions") fnList.action(path, meta);
+            break;
           default:
             break;
         }
