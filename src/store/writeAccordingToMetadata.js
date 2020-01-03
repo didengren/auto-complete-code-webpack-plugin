@@ -28,8 +28,8 @@ const callParser = (data, meta) => {
               fnList.state(path, meta);
             }
             break;
-          case "mutation":
-            fnList.mutation(path, meta);
+          case "mutations":
+            if (meta.nodeIdName === "mutations") fnList.mutation(path, meta);
             break;
           default:
             break;

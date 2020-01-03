@@ -60,12 +60,15 @@ module.exports = (exprStatement, optItem, newFilePathArr) => {
         switch (meta.arguments.fnName) {
           case "commit":
             meta.arguments.mutationName = namedToWho;
+            meta.nodeIdName = "mutations";
             break;
           case "dispatch":
             meta.arguments.actionName = namedToWho;
+            meta.nodeIdName = "actions";
             break;
           case "preDispatch":
             meta.arguments.actionName = namedToWho;
+            meta.nodeIdName = "actions";
             break;
           default:
             break;

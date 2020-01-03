@@ -31,20 +31,22 @@ const constructMutProp = (meta) => {
     builder.functionExpression(
       null,
       [builder.identifier("state"), builder.identifier("data")],
-      meta.arguments.state && meta.arguments.state.name
-        ? [
-            builder.expressionStatement(
-              builder.assignmentExpression(
-                "=",
-                builder.memberExpression(
-                  builder.identifier("state"),
-                  builder.identifier(meta.arguments.state.name)
-                ),
-                builder.identifier("data")
+      builder.blockStatement(
+        meta.arguments.state && meta.arguments.state.name
+          ? [
+              builder.expressionStatement(
+                builder.assignmentExpression(
+                  "=",
+                  builder.memberExpression(
+                    builder.identifier("state"),
+                    builder.identifier(meta.arguments.state.name)
+                  ),
+                  builder.identifier("data")
+                )
               )
-            )
-          ]
-        : []
+            ]
+          : []
+      )
     )
   );
 };
@@ -66,7 +68,7 @@ const fnList = {
   mutation(path, meta) {
     const node = path.node;
     const props = node.init.properties;
-    if (props.length === 0) {
+    if (props.length > 0) {
       for (let i = 0; i < props.length; i++) {
         if (
           meta.arguments.mutationName &&
