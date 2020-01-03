@@ -51,6 +51,37 @@ const constructMutProp = (meta) => {
   );
 };
 
+const constructActProp = (meta) => {
+  return builder.property(
+    "init",
+    builder.identifier(meta.arguments.actionName),
+    builder.functionExpression(
+      null,
+      [
+        builder.objectPattern([
+          builder.property(
+            "init",
+            builder.identifier("commit"),
+            builder.identifier("commit")
+          ),
+          builder.property(
+            "init",
+            builder.identifier("dispatch"),
+            builder.identifier("dispatch")
+          ),
+          builder.property(
+            "init",
+            builder.identifier("state"),
+            builder.identifier("state")
+          )
+        ]),
+        builder.identifier("params")
+      ],
+      builder.blockStatement([])
+    )
+  );
+};
+
 // 修改store中各属性的方法集合
 // 通过修改ast node 改变store中各属性的值
 const fnList = {
@@ -85,6 +116,27 @@ const fnList = {
     const prop = constructMutProp(meta);
     props.push(prop);
     path.replace(node);
+  },
+  action(path, meta) {
+    const node = path.node;
+    const props = node.init.properties;
+    if (props.length > 0) {
+      for (let i = 0; i < props.length; i++) {
+        if (
+          meta.arguments.actionName &&
+          props[i].key.name === meta.arguments.actionName
+        ) {
+          props[i] = constructActProp(meta);
+          path.replace(node);
+          this.mutation(path, meta);
+          return;
+        }
+      }
+    }
+    const prop = constructActProp(meta);
+    props.push(prop);
+    path.replace(node);
+    this.mutation(path, meta);
   }
 };
 
