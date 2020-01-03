@@ -7,65 +7,7 @@ const { readFile } = require("../common/fileAccessor");
 
 const { codeToAst, parseAst } = require("../common/fileParser");
 
-const nodeStrategy = {
-  Boolean: (b) => b.literal(false),
-  String: (b) => b.literal(""),
-  Object: (b) => b.objectExpression([]),
-  Array: (b) => b.arrayExpression(null, [], b.blockStatement([])),
-  Number: (b) => b.literal(0),
-  Function: (b) => b.functionExpression(null, [], b.blockStatement([])),
-  Null: (b) => b.literal(null),
-  Undefined: (b) => b.identifier("undefined"),
-  Symbol: (b) => b.callExpression(b.identifier("Symbol"), b.literal(0))
-};
-
-/**
- * 根据类型返回属性值的node
- * @param builder recast.types.builders
- * @param t type of value for Property
- */
-const obtainValNodeFromType = (builder, t) => {
-  const keys = Object.keys(nodeStrategy);
-  const reg = new RegExp(t, "i");
-  for (let i = 0; i < keys.length; i++) {
-    if (t.length === keys[i].length && reg.test(keys[i]))
-      return nodeStrategy[keys[i]](builder);
-  }
-  return builder.literal(null);
-};
-
-/**
- * 添加Property node
- * @param props Properties node
- * @param k key of Property
- * @param t type of value for Property
- */
-const addProp = (props, k, t) => {
-  const builder = recast.types.builders;
-  const prop = builder.property(
-    "init",
-    builder.identifier(k),
-    obtainValNodeFromType(builder, t)
-  );
-  props.push(prop);
-  return props;
-};
-
-// 修改store中各属性的方法集合
-// 通过修改ast node 改变store中各属性的值
-const fnList = {
-  state(path, meta) {
-    const node = path.node;
-    if (meta.arguments.state && meta.arguments.state.name) {
-      node.init.properties = addProp(
-        node.init.properties,
-        meta.arguments.state.name,
-        meta.arguments.state.type
-      );
-      path.replace(node);
-    }
-  }
-};
+const fnList = require("./fnList");
 
 /**
  * 读取文件或获取outermostStruct字符串内容后的操作
@@ -85,6 +27,12 @@ const callParser = (data, meta) => {
             if (node.init.properties.length === 0) {
               fnList.state(path, meta);
             }
+            break;
+          case "mutations":
+            if (meta.nodeIdName === "mutations") fnList.mutation(path, meta);
+            break;
+          case "actions":
+            if (meta.nodeIdName === "actions") fnList.action(path, meta);
             break;
           default:
             break;
