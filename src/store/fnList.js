@@ -128,6 +128,10 @@ const fnList = {
         ) {
           props[i] = constructActProp(meta);
           path.replace(node);
+          meta.arguments.mutationName = meta.arguments.actionName.replace(
+            /SET_/i,
+            ""
+          );
           this.mutation(path, meta);
           return;
         }
@@ -136,6 +140,10 @@ const fnList = {
     const prop = constructActProp(meta);
     props.push(prop);
     path.replace(node);
+    meta.arguments.mutationName = meta.arguments.actionName.replace(
+      /SET_/i,
+      ""
+    );
     this.mutation(path, meta);
   }
 };
