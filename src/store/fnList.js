@@ -4,6 +4,18 @@ const initValAccordingType = require("../common/initValAccordingType");
 
 const builder = recast.types.builders;
 
+const paramsofActProp = (...idNames) => {
+  return idNames.map((idName) => {
+    idName = builder.property(
+      "init",
+      builder.identifier(idName),
+      builder.identifier(idName)
+    );
+    idName.shorthand = true;
+    return idName;
+  });
+};
+
 /**
  * 构造state属性中的property
  * @param {Object} meta 元数据
@@ -52,31 +64,14 @@ const constructMutProp = (meta) => {
  * @param {Object} meta 元数据
  */
 const constructActProp = (meta) => {
+  const params = paramsofActProp("commit", "dispatch", "state");
+
   return builder.property(
     "init",
     builder.identifier(meta.arguments.actionName),
     builder.functionExpression(
       null,
-      [
-        builder.objectPattern([
-          builder.property(
-            "init",
-            builder.identifier("commit"),
-            builder.identifier("commit")
-          ),
-          builder.property(
-            "init",
-            builder.identifier("dispatch"),
-            builder.identifier("dispatch")
-          ),
-          builder.property(
-            "init",
-            builder.identifier("state"),
-            builder.identifier("state")
-          )
-        ]),
-        builder.identifier("params")
-      ],
+      [builder.objectPattern([...params]), builder.identifier("params")],
       builder.blockStatement([])
     )
   );
@@ -136,11 +131,6 @@ const fnList = {
         ) {
           props[i] = constructActProp(meta);
           path.replace(node);
-          meta.arguments.mutationName = meta.arguments.actionName.replace(
-            /SET_/i,
-            ""
-          );
-          this.mutation(path, meta);
           return;
         }
       }
@@ -148,11 +138,6 @@ const fnList = {
     const prop = constructActProp(meta);
     props.push(prop);
     path.replace(node);
-    meta.arguments.mutationName = meta.arguments.actionName.replace(
-      /SET_/i,
-      ""
-    );
-    this.mutation(path, meta);
   }
 };
 
