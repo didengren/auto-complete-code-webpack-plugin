@@ -30,3 +30,17 @@ exports.readFile = (file, cb) => {
     }
   });
 };
+
+/**
+ * 同步读取文件string
+ * @param {String} 文件地址
+ */
+exports.readFileSync = (file, cb) => {
+  try {
+    const data = fs.readFileSync(file, "utf-8");
+    const code = howGetJsCode(file, data);
+    if (code) cb(code);
+  } catch (error) {
+    console.error("auto-complete-code-webpack-plugin", error);
+  }
+};

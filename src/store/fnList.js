@@ -5,10 +5,8 @@ const initValAccordingType = require("../common/initValAccordingType");
 const builder = recast.types.builders;
 
 /**
- * 添加Property node
- * @param props Properties node
- * @param {String} k key of Property
- * @param {String} t type of value for Property
+ * 构造state属性中的property
+ * @param {Object} meta 元数据
  */
 const constructStateProp = (meta) => {
   return builder.property(
@@ -49,6 +47,10 @@ const constructMutProp = (meta) => {
   );
 };
 
+/**
+ * 构造action的property
+ * @param {Object} meta 元数据
+ */
 const constructActProp = (meta) => {
   return builder.property(
     "init",

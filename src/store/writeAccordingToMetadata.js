@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const recast = require("recast");
 
-const { readFile } = require("../common/fileAccessor");
+const { readFileSync } = require("../common/fileAccessor");
 
 const { codeToAst, parseAst } = require("../common/fileParser");
 
@@ -44,10 +44,8 @@ const callParser = (data, meta) => {
       (res) => {
         // 修改好的ast转成code string 写入文件中
         const finalData = recast.print(res).code;
-        fs.writeFileSync(meta.path, finalData, (err) => {
-          if (err) throw err;
-          console.log("store module写入成功");
-        });
+        fs.writeFileSync(meta.path, finalData, "utf-8");
+        console.log("store module写入成功");
       },
       (err) => {
         throw err;
@@ -93,7 +91,7 @@ exports.createFileAndWrite = async function(meta) {
  */
 exports.writeInFile = function(meta) {
   // 读取文件
-  readFile(meta.path, function(data) {
+  readFileSync(meta.path, function(data) {
     callParser(data, meta);
   });
 };
