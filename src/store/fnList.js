@@ -10,14 +10,12 @@ const builder = recast.types.builders;
  * @param {String} k key of Property
  * @param {String} t type of value for Property
  */
-const constructStateProp = (props, k, t) => {
-  const prop = builder.property(
+const constructStateProp = (meta) => {
+  return builder.property(
     "init",
-    builder.identifier(k),
-    initValAccordingType(t)
+    builder.identifier(meta.arguments.state.name),
+    initValAccordingType(meta.arguments.state.type)
   );
-  props.push(prop);
-  return props;
 };
 
 /**
@@ -87,14 +85,22 @@ const constructActProp = (meta) => {
 const fnList = {
   state(path, meta) {
     const node = path.node;
-    if (meta.arguments.state && meta.arguments.state.name) {
-      node.init.properties = constructStateProp(
-        node.init.properties,
-        meta.arguments.state.name,
-        meta.arguments.state.type
-      );
-      path.replace(node);
+    const props = node.init.properties;
+    if (props.length > 0) {
+      for (let i = 0; i < props.length; i++) {
+        if (
+          meta.arguments.state &&
+          props[i].key.name === meta.arguments.state.name
+        ) {
+          props[i] = constructStateProp(meta);
+          path.replace(node);
+          return;
+        }
+      }
     }
+    const prop = constructStateProp(meta);
+    props.push(prop);
+    path.replace(node);
   },
   mutation(path, meta) {
     const node = path.node;
