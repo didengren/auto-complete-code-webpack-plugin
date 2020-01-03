@@ -24,9 +24,7 @@ const callParser = (data, meta) => {
       if (node.type === "VariableDeclarator") {
         switch (node.id.name) {
           case "state":
-            if (node.init.properties.length === 0) {
-              fnList.state(path, meta);
-            }
+            fnList.state(path, meta);
             break;
           case "mutations":
             if (meta.nodeIdName === "mutations") fnList.mutation(path, meta);

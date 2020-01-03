@@ -106,13 +106,14 @@ module.exports = (exprStatement, optItem, newFilePathArr) => {
     /**
      * meta e.g.
      * {
+     *   nodeIdName: actions,
      *   arguments: {
      *     fnName: 'dispatch',
      *     actionName: 'CHANGE_SUB_BTN',
      *     data: '{ data: true }',
      *     state: {
      *       name: 'test',
-     *       initVal: '{}'
+     *       type: '{}'
      *     }
      *   },
      *   path: '/Users/xunianzu/work_space/trina/gold-medal-butler/src/store/amAdd'
