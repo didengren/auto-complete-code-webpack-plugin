@@ -25,49 +25,49 @@ exports.parseAst = (ast, cb) => {
         recast.visit(ast, {
           visitVariableDeclaration(path) {
             TNT.VariableDeclaration.assert(path.node);
-            console.log(
-              "\n------------- VariableDeclaration over ---------------\n"
-            );
+            // console.log(
+            //   "\n------------- VariableDeclaration over ---------------\n"
+            // );
             nodeHandler.call(this, path, cb);
           },
           visitVariableDeclarator(path) {
             TNT.VariableDeclarator.assert(path.node);
-            console.log(
-              "\n------------- VariableDeclarator over ---------------\n"
-            );
+            // console.log(
+            //   "\n------------- VariableDeclarator over ---------------\n"
+            // );
             nodeHandler.call(this, path, cb);
           },
           visitIdentifier(path) {
             TNT.Identifier.assert(path.node);
-            console.log("\n------------- Identifier over ---------------\n");
+            // console.log("\n------------- Identifier over ---------------\n");
             nodeHandler.call(this, path, cb);
           },
           visitArrowFunctionExpression(path) {
             TNT.ArrowFunctionExpression.assert(path.node);
-            console.log(
-              "\n------------- ArrowFunctionExpression over ---------------\n"
-            );
+            // console.log(
+            //   "\n------------- ArrowFunctionExpression over ---------------\n"
+            // );
             nodeHandler.call(this, path, cb);
           },
           visitFunctionExpression(path) {
             TNT.FunctionExpression.assert(path.node);
-            console.log(
-              "\n------------- FunctionExpression over ---------------\n"
-            );
+            // console.log(
+            //   "\n------------- FunctionExpression over ---------------\n"
+            // );
             nodeHandler.call(this, path, cb);
           },
           visitObjectExpression(path) {
             TNT.ObjectExpression.assert(path.node);
-            console.log(
-              "\n------------- ObjectExpression over ---------------\n"
-            );
+            // console.log(
+            //   "\n------------- ObjectExpression over ---------------\n"
+            // );
             nodeHandler.call(this, path, cb);
           },
           visitExportDefaultDeclaration(path) {
             TNT.ExportDefaultDeclaration.assert(path.node);
-            console.log(
-              "\n------------- ExportDefaultDeclaration over ---------------\n"
-            );
+            // console.log(
+            //   "\n------------- ExportDefaultDeclaration over ---------------\n"
+            // );
             nodeHandler.call(this, path, cb);
           }
         })

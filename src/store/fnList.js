@@ -21,6 +21,7 @@ const paramsofActProp = (...idNames) => {
  * @param {Object} meta 元数据
  */
 const constructStateProp = (meta) => {
+  if (!meta.arguments.state) return;
   return builder.property(
     "init",
     builder.identifier(meta.arguments.state.name),
@@ -108,8 +109,8 @@ const fnList = {
           meta.arguments.mutationName &&
           props[i].key.name === meta.arguments.mutationName
         ) {
-          props[i] = constructMutProp(meta);
-          path.replace(node);
+          // props[i] = constructMutProp(meta);
+          // path.replace(node);
           return;
         }
       }
@@ -129,8 +130,8 @@ const fnList = {
           meta.arguments.actionName &&
           props[i].key.name === meta.arguments.actionName
         ) {
-          props[i] = constructActProp(meta);
-          path.replace(node);
+          // props[i] = constructActProp(meta);
+          // path.replace(node);
           return;
         }
       }
@@ -141,4 +142,7 @@ const fnList = {
   }
 };
 
-module.exports = fnList;
+module.exports = {
+  fnList,
+  constructMutProp
+};
